@@ -75,9 +75,12 @@ function Login() {
         email: values.email,
         password: values.password,
       });
+       console.log("🔵 RESPONSE:", response.data);
       login(response.data.token);
       navigate("/dashboard");
     } catch (err: any) {
+       console.log("🔵 ERROR RESPONSE:", err.response?.data);
+        console.log("🔵 ERROR STATUS:", err.response?.status);
       setServerError(err.response?.data?.message || "Login failed");
       console.error("Login error:", err);
     }
