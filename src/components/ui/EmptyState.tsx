@@ -12,7 +12,7 @@ const EmptyState = ({ title, description, action, className }: EmptyStateProps) 
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-[rgb(var(--stroke-1))] bg-white/70 px-6 py-14 text-center",
+        "flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-[rgb(var(--stroke-1))] bg-white/70 px-6 py-14 text-center dark:border-gray-700 dark:bg-gray-800/60",
         className
       )}
     >
@@ -34,8 +34,12 @@ const EmptyState = ({ title, description, action, className }: EmptyStateProps) 
         </svg>
       </div>
       <div>
-        <h3 className="text-lg font-semibold">{title}</h3>
-        <p className="mt-1 text-sm text-[rgb(var(--text-2))]">{description}</p>
+        <h3 className="text-lg font-semibold text-[rgb(var(--text-1))] dark:text-white">
+          {title}
+        </h3>
+        <p className="mt-1 text-sm text-[rgb(var(--text-2))] dark:text-gray-400">
+          {description}
+        </p>
       </div>
       {action}
     </div>

@@ -163,8 +163,10 @@ const AddClients = () => {
             <p className="text-xs uppercase tracking-[0.3em] text-[rgb(var(--text-2))]">
               Client intake
             </p>
-            <h1 className="text-3xl font-semibold">Add clients</h1>
-            <p className="mt-1 text-sm text-[rgb(var(--text-2))]">
+            <h1 className="text-3xl font-semibold text-[rgb(var(--text-1))] dark:text-white">
+              Add clients
+            </h1>
+            <p className="mt-1 text-sm text-[rgb(var(--text-2))] dark:text-gray-300">
               Capture new clients fast and keep your pipeline tidy.
             </p>
           </div>
@@ -181,10 +183,12 @@ const AddClients = () => {
           ) : (
             summaryCards.map((card) => (
               <Card key={card.label} className="p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-[rgb(var(--text-2))]">
+                <p className="text-xs uppercase tracking-[0.2em] text-[rgb(var(--text-2))] dark:text-gray-400">
                   {card.label}
                 </p>
-                <p className="mt-3 text-2xl font-semibold">{card.value}</p>
+                <p className="mt-3 text-2xl font-semibold text-[rgb(var(--text-1))] dark:text-white">
+                  {card.value}
+                </p>
               </Card>
             ))
           )}
@@ -197,8 +201,10 @@ const AddClients = () => {
                 <UserGroupIcon className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm font-semibold">Add a new client</p>
-                <p className="text-xs text-[rgb(var(--text-2))]">
+                <p className="text-sm font-semibold text-[rgb(var(--text-1))] dark:text-white">
+                  Add a new client
+                </p>
+                <p className="text-xs text-[rgb(var(--text-2))] dark:text-gray-400">
                   We will save this to your master list.
                 </p>
               </div>
@@ -233,8 +239,10 @@ const AddClients = () => {
           <Card className="p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm font-semibold">Client directory</p>
-                <p className="text-xs text-[rgb(var(--text-2))]">
+                <p className="text-sm font-semibold text-[rgb(var(--text-1))] dark:text-white">
+                  Client directory
+                </p>
+                <p className="text-xs text-[rgb(var(--text-2))] dark:text-gray-400">
                   Search, review, and remove clients.
                 </p>
               </div>
@@ -273,7 +281,7 @@ const AddClients = () => {
                       exit="exit"
                     >
                       {editingId === client._id ? (
-                        <div className="rounded-2xl border border-[rgb(var(--stroke-1))] bg-[rgb(var(--surface-2))] px-4 py-3">
+                        <div className="rounded-2xl border border-[rgb(var(--stroke-1))] bg-[rgb(var(--surface-2))] px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
                           <div className="space-y-3">
                             <Input
                               value={editName}
@@ -312,11 +320,13 @@ const AddClients = () => {
                           </div>
                         </div>
                       ) : (
-                        <div className="rounded-2xl border border-[rgb(var(--stroke-1))] bg-[rgb(var(--surface-2))] px-4 py-3">
+                        <div className="rounded-2xl border border-[rgb(var(--stroke-1))] bg-[rgb(var(--surface-2))] px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
                           <div className="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                              <p className="text-sm font-semibold">{client.name}</p>
-                              <p className="text-xs text-[rgb(var(--text-2))]">
+                              <p className="text-sm font-semibold text-[rgb(var(--text-1))] dark:text-white">
+                                {client.name}
+                              </p>
+                              <p className="text-xs text-[rgb(var(--text-2))] dark:text-gray-400">
                                 {client.email || "No email on file"}
                               </p>
                             </div>
@@ -352,7 +362,7 @@ const AddClients = () => {
               )}
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 dark:rounded-2xl dark:border dark:border-gray-700 dark:bg-gray-800 dark:p-3">
               <Button
                 variant="ghost"
                 onClick={() => setPage((prev) => Math.max(1, prev - 1))}

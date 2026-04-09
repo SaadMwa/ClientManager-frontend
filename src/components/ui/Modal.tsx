@@ -41,10 +41,10 @@ const Modal = ({ open, onClose, title, children, panelClassName }: ModalProps) =
             >
                 <Dialog.Panel
                   className={cn(
-                  "w-full max-w-2xl rounded-2xl border border-[rgb(var(--stroke-1))] bg-[rgb(var(--surface-1))] p-6 shadow-2xl",
-                  panelClassName
-                )}
-              >
+                    "w-full max-w-2xl rounded-2xl border border-[rgb(var(--stroke-1))] bg-[rgb(var(--surface-1))] p-6 shadow-2xl dark:border-gray-700 dark:bg-gray-800",
+                    panelClassName
+                  )}
+                >
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <Dialog.Title className="text-lg font-semibold text-[rgb(var(--text-1))]">
@@ -53,7 +53,7 @@ const Modal = ({ open, onClose, title, children, panelClassName }: ModalProps) =
                   </div>
                   <button
                     onClick={onClose}
-                    className="rounded-full p-2 text-[rgb(var(--text-2))] transition hover:bg-[rgb(var(--surface-2))] hover:text-[rgb(var(--text-1))]"
+                    className="rounded-full p-2 text-[rgb(var(--text-2))] transition hover:bg-[rgb(var(--surface-2))] hover:text-[rgb(var(--text-1))] dark:hover:bg-gray-700 dark:hover:text-white"
                     aria-label="Close modal"
                   >
                     <XMarkIcon className="h-5 w-5" />
