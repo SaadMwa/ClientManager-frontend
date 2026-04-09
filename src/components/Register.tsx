@@ -9,7 +9,6 @@ import {
   EyeSlashIcon,
   LockClosedIcon,
   UserIcon,
-  EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 import API from "../api/axios";
 import Button from "./ui/Button";
