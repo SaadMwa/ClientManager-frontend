@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --brand-1: 20 30 75;
+  --brand-2: 56 116 255;
+  --brand-3: 131 187 255;
+  --surface-0: 245 246 250;
+  --surface-1: 255 255 255;
+  --surface-2: 236 240 247;
+  --text-1: 14 18 32;
+  --text-2: 88 96 120;
+  --stroke-1: 222 229 240;
+  --success: 34 197 94;
+  --warning: 245 158 11;
+  --danger: 239 68 68;
+  --shadow-1: 0 20px 60px -40px rgb(17 24 39 / 0.6);
+}
+
+:root.dark {
+  color-scheme: dark;
+  --brand-1: 191 219 254;
+  --brand-2: 99 102 241;
+  --brand-3: 129 140 248;
+  --surface-0: 9 12 20;
+  --surface-1: 17 24 39;
+  --surface-2: 30 41 59;
+  --text-1: 226 232 240;
+  --text-2: 148 163 184;
+  --stroke-1: 51 65 85;
+  --shadow-1: 0 24px 60px -40px rgb(15 23 42 / 0.9);
+}
+
+body {
+  font-family: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(56, 116, 255, 0.18), transparent 60%),
+    radial-gradient(800px 420px at 90% -20%, rgba(131, 187, 255, 0.24), transparent 60%),
+    rgb(var(--surface-0));
+  color: rgb(var(--text-1));
+  min-height: 100vh;
+}
+
+.dark body {
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(59, 130, 246, 0.2), transparent 60%),
+    radial-gradient(800px 420px at 90% -20%, rgba(99, 102, 241, 0.22), transparent 60%),
+    rgb(var(--surface-0));
+}
+
+code,
+pre {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+::selection {
+  background: rgba(56, 116, 255, 0.22);
+}
