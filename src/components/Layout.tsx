@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/authContext";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -17,11 +17,12 @@ import { cn } from "../utils/cn";
 const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: Squares2X2Icon },
   { label: "Projects", to: "/projects", icon: FolderOpenIcon },
-  { label: "Add Clients", to: "/analytics", icon: ChartBarIcon },
+  { label: "Clients", to: "/clients", icon: ChartBarIcon },
 ];
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { logout, user } = useAuth();
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isDark, setIsDark] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -35,6 +36,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     root.classList.toggle("dark", isDark);
     window.localStorage.setItem("theme", isDark ? "dark" : "light");
   }, [isDark]);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <div className="min-h-screen">
@@ -90,11 +96,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 Signed in
               </p>
               <p className="mt-2 text-sm font-medium">{user?.email}</p>
-              <Button
-                variant="ghost"
-                className="mt-3 w-full justify-center text-sm"
-                onClick={logout}
-              >
+              <Button variant="ghost" className="mt-3 w-full justify-center text-sm" onClick={handleLogout}>
                 Logout
               </Button>
             </div>
@@ -195,11 +197,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   Signed in
                 </p>
                 <p className="mt-2 text-sm font-medium">{user?.email}</p>
-                <Button
-                  variant="ghost"
-                  className="mt-3 w-full justify-center text-sm"
-                  onClick={logout}
-                >
+                <Button variant="ghost" className="mt-3 w-full justify-center text-sm" onClick={handleLogout}>
                   Logout
                 </Button>
               </div>
@@ -207,6 +205,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </motion.div>
         )}
       </AnimatePresence>
+      <footer className="px-4 pb-6 text-center text-xs text-[rgb(var(--text-2))]">
+        Copyright {new Date().getFullYear()} Freeee. Trusted by freelancers.
+      </footer>
     </div>
   );
 };

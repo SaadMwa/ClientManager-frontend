@@ -2,16 +2,15 @@ import axios from "axios";
 
 const API = axios.create({
     baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
-    withCredentials: true,          // include cookies automatically
+    withCredentials: true,
 })
 
-// Add a request interceptor to include credentials in every request
 API.interceptors.request.use((config) => {
-    const Token = localStorage.getItem("token");
-    if (Token) {
-        config.headers["Authorization"] = `Bearer ${Token}`;
-    }
-    return config;
+  const token = localStorage.getItem("auth_token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export default API;

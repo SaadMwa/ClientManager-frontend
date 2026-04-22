@@ -42,16 +42,14 @@ const Register = () => {
     setServerError("");
     setSuccess("");
     try {
-      const res = await API.post("/auth/register", {
+      await API.post("/auth/register", {
         name: values.name,
         email: values.email,
         password: values.password,
       });
-      console.log("Registration successful:", res.data);
       setSuccess("Registration successful! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 1500);
+      setTimeout(() => navigate("/login", { replace: true }), 1500);
     } catch (error: any) {
-      console.error("Registration error:", error);
       if (error.response && error.response.data) {
         setServerError(error.response.data.message || "Registration failed");
       } else if (error.request) {
@@ -74,13 +72,11 @@ const Register = () => {
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.35 }}
           className="w-full max-w-md rounded-3xl border border-white/60 bg-white/75 p-8 shadow-2xl backdrop-blur"
         >
           <div className="mb-8 text-center">
-            <p className="text-xs uppercase tracking-[0.3em] text-[rgb(var(--text-2))]">
-              Start here
-            </p>
+            <p className="text-xs uppercase tracking-[0.3em] text-[rgb(var(--text-2))]">Start here</p>
             <h1 className="mt-3 text-3xl font-semibold">Create your workspace</h1>
             <p className="mt-2 text-sm text-[rgb(var(--text-2))]">
               Build a crisp portfolio dashboard in minutes.
@@ -92,57 +88,47 @@ const Register = () => {
               <input
                 type="text"
                 id="register-name"
-                className="peer h-12 w-full rounded-2xl border border-white/60 bg-white/80 px-11 text-sm text-[rgb(var(--text-1))] shadow-sm outline-none transition focus:border-[rgb(var(--brand-2))] focus:ring-2 focus:ring-[rgba(56,116,255,0.2)]"
-                placeholder=" "
+                className="h-12 w-full rounded-2xl border border-white/60 bg-white/80 pl-11 pr-3 text-sm text-[rgb(var(--text-1))] shadow-sm outline-none transition focus:border-[rgb(var(--brand-2))] focus:ring-2 focus:ring-[rgba(56,116,255,0.2)]"
+                placeholder="Full name"
                 {...register("name")}
               />
-              <label
-                htmlFor="register-name"
-                className="pointer-events-none absolute left-11 top-3.5 text-xs font-medium text-[rgb(var(--text-2))] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-[rgb(var(--text-2))] peer-focus:top-1 peer-focus:text-xs"
-              >
-                Full name
-              </label>
               <UserIcon className="absolute left-3 top-3.5 h-5 w-5 text-[rgb(var(--text-2))]" />
-              {errors.name && (
-                <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>
+              {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
+            </div>
+
+            <div className="relative">
+              <input
+                type="email"
+                id="register-email"
+                className="h-12 w-full rounded-2xl border border-white/60 bg-white/80 pl-11 pr-3 text-sm text-[rgb(var(--text-1))] shadow-sm outline-none transition focus:border-[rgb(var(--brand-2))] focus:ring-2 focus:ring-[rgba(56,116,255,0.2)]"
+                placeholder="Email address"
+                {...register("email")}
+              />
+              <UserIcon className="absolute left-3 top-3.5 h-5 w-5 text-[rgb(var(--text-2))]" />
+              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
+            </div>
+
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="register-password"
+                className="h-12 w-full rounded-2xl border border-white/60 bg-white/80 pl-11 pr-11 text-sm text-[rgb(var(--text-1))] shadow-sm outline-none transition focus:border-[rgb(var(--brand-2))] focus:ring-2 focus:ring-[rgba(56,116,255,0.2)]"
+                placeholder="Password"
+                {...register("password")}
+              />
+              <LockClosedIcon className="absolute left-3 top-3.5 h-5 w-5 text-[rgb(var(--text-2))]" />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-3.5 text-[rgb(var(--text-2))] hover:text-[rgb(var(--text-1))]"
+              >
+                {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
+              </button>
+              {errors.password && (
+                <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>
               )}
             </div>
 
-         <div className="relative">
-    <input
-        type="email"
-        id="register-email"
-        className="peer h-12 w-full rounded-2xl border border-white/60 bg-white/80 pl-11 pr-3 text-sm text-[rgb(var(--text-1))] shadow-sm outline-none transition focus:border-[rgb(var(--brand-2))] focus:ring-2 focus:ring-[rgba(56,116,255,0.2)]"
-        placeholder="Email address"  // 👈 Add direct placeholder
-        {...register("email")}
-    />
-    <UserIcon className="absolute left-3 top-3.5 h-5 w-5 text-[rgb(var(--text-2))]" />
-    {/* 👈 REMOVE the <label> tag entirely */}
-    {errors.email && (
-        <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
-    )}
-</div>
-
-       <div className="relative">
-    <input
-        type={showPassword ? "text" : "password"}
-        id="register-password"
-        className="peer h-12 w-full rounded-2xl border border-white/60 bg-white/80 pl-11 pr-11 text-sm text-[rgb(var(--text-1))] shadow-sm outline-none transition focus:border-[rgb(var(--brand-2))] focus:ring-2 focus:ring-[rgba(56,116,255,0.2)]"
-        placeholder="Password"  // 👈 Direct placeholder
-        {...register("password")}
-    />
-    <LockClosedIcon className="absolute left-3 top-3.5 h-5 w-5 text-[rgb(var(--text-2))]" />
-    <button
-        type="button"
-        onClick={() => setShowPassword((prev) => !prev)}
-        className="absolute right-3 top-3.5 text-[rgb(var(--text-2))] hover:text-[rgb(var(--text-1))]"
-    >
-        {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
-    </button>
-    {errors.password && (
-        <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>
-    )}
-</div>
             <label className="flex items-start gap-2 text-sm text-[rgb(var(--text-2))]">
               <input
                 type="checkbox"
@@ -151,9 +137,7 @@ const Register = () => {
               />
               I agree to the Terms of Service and Privacy Policy.
             </label>
-            {errors.agree && (
-              <p className="text-xs text-red-500">{errors.agree.message}</p>
-            )}
+            {errors.agree && <p className="text-xs text-red-500">{errors.agree.message}</p>}
 
             {serverError && (
               <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
@@ -169,21 +153,6 @@ const Register = () => {
             <Button type="submit" className="w-full" disabled={!isValid || isSubmitting}>
               {isSubmitting ? "Creating account..." : "Create account"}
             </Button>
-
-            <div className="flex items-center gap-3 text-xs text-[rgb(var(--text-2))]">
-              <div className="h-px flex-1 bg-white/70" />
-              Or sign up with
-              <div className="h-px flex-1 bg-white/70" />
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Button type="button" variant="outline">
-                Google
-              </Button>
-              <Button type="button" variant="outline">
-                GitHub
-              </Button>
-            </div>
           </form>
 
           <p className="mt-6 text-center text-sm text-[rgb(var(--text-2))]">

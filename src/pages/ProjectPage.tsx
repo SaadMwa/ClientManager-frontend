@@ -101,23 +101,62 @@ const Projects = () => {
       }
       return (await API.post("/projects", payload)).data as Project;
     },
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries({ queryKey: ["projects"] });
+      const previous = queryClient.getQueryData<Project[]>(["projects"]);
+
+      if (editingProject && previous) {
+        queryClient.setQueryData(
+          ["projects"],
+          previous.map((project) =>
+            project._id === editingProject._id ? { ...project, ...payload } : project
+          )
+        );
+      }
+      return { previous };
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success(editingProject ? "Project updated" : "Project created");
       setIsFormOpen(false);
       setEditingProject(null);
       form.reset({ name: "", clientId: "", estimatedHours: 0, agreedPrice: 0 });
     },
-    onError: () => toast.error("Failed to save project"),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+    onError: (_error, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["projects"], context.previous);
+      }
+      toast.error("Failed to save project");
+    },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => API.delete(`/projects/${id}`),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["projects"] });
+      const previous = queryClient.getQueryData<Project[]>(["projects"]);
+      if (previous) {
+        queryClient.setQueryData(
+          ["projects"],
+          previous.filter((project) => project._id !== id)
+        );
+      }
+      return { previous };
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Project deleted");
     },
-    onError: () => toast.error("Failed to delete project"),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+    onError: (_error, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["projects"], context.previous);
+      }
+      toast.error("Failed to delete project");
+    },
   });
 
   const toggleMutation = useMutation({
@@ -130,11 +169,32 @@ const Projects = () => {
         })
       ).data as Project;
     },
+    onMutate: async (project) => {
+      await queryClient.cancelQueries({ queryKey: ["projects"] });
+      const previous = queryClient.getQueryData<Project[]>(["projects"]);
+      const newStatus = project.status === "active" ? "completed" : "active";
+      if (previous) {
+        queryClient.setQueryData(
+          ["projects"],
+          previous.map((item) =>
+            item._id === project._id ? { ...item, status: newStatus } : item
+          )
+        );
+      }
+      return { previous };
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Project status updated");
     },
-    onError: () => toast.error("Failed to update status"),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+    onError: (_error, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["projects"], context.previous);
+      }
+      toast.error("Failed to update status");
+    },
   });
 
   const projects = projectsQuery.data ?? [];

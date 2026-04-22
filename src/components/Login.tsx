@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -23,13 +23,11 @@ const schema = z.object({
 type LoginForm = z.infer<typeof schema>;
 
 function Login() {
-
   const navigate = useNavigate();
-  const { login,user,loading } = useAuth();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState("");
-
- 
+  const [redirecting, setRedirecting] = useState(false);
 
   const {
     register,
@@ -41,48 +39,32 @@ function Login() {
     defaultValues: { email: "", password: "", remember: true },
   });
 
-
-     // 👇 ADD THIS REDIRECT LOGIC
-  useEffect(() => {
-    console.log("🔵 Login page - loading:", loading);
-    console.log("🔵 Login page - user:", user);
-    
-    if (!loading && user) {
-      console.log("✅ Already logged in! Redirecting to dashboard");
-      navigate("/dashboard", { replace: true });
-    }
-  }, [loading, user, navigate]);
-
-  // 👇 ADD LOADING STATE
-  if (loading) {
+  if (redirecting) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-lg">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center bg-[rgb(var(--bg-1))]">
+        <div className="space-y-4 text-center">
+          <div className="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-[rgb(var(--stroke-1))] border-t-[rgb(var(--brand-2))]" />
+          <p className="text-sm text-[rgb(var(--text-2))]">Opening your workspace...</p>
+        </div>
       </div>
     );
   }
 
-  // 👇 IF USER EXISTS, DON'T RENDER LOGIN FORM
-  if (user) {
-    return null;
-  }
-
   const onSubmit = async (values: LoginForm) => {
-    
     setServerError("");
+    setRedirecting(true);
+
     try {
       const response = await API.post("/auth/login", {
         email: values.email,
         password: values.password,
       });
-       console.log("🔵 RESPONSE:", response.data);
-      login(response.data.token);
-      navigate("/dashboard");
+
+      login(response.data.user, response.data.token);
+      navigate("/dashboard", { replace: true });
     } catch (err: any) {
-       console.log("🔵 ERROR RESPONSE:", err.response?.data);
-        console.log("🔵 ERROR STATUS:", err.response?.status);
       setServerError(err.response?.data?.message || "Login failed");
-      console.error("Login error:", err);
+      setRedirecting(false);
     }
   };
 
@@ -98,7 +80,7 @@ function Login() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.35 }}
           className="w-full max-w-md rounded-3xl border border-white/60 bg-white/70 p-8 shadow-2xl backdrop-blur"
         >
           <div className="mb-8 text-center">
@@ -120,7 +102,6 @@ function Login() {
                 placeholder="Email Address"
                 {...register("email")}
               />
-           
               <UserIcon className="absolute left-3 top-3.5 h-5 w-5 text-[rgb(var(--text-2))]" />
               {errors.email && (
                 <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
@@ -141,7 +122,6 @@ function Login() {
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute right-3 top-3.5 text-[rgb(var(--text-2))] hover:text-[rgb(var(--text-1))]"
-    
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -164,9 +144,7 @@ function Login() {
                 />
                 Remember me
               </label>
-              <a href="#" className="text-[rgb(var(--brand-2))] hover:underline">
-                Forgot password?
-              </a>
+              <span className="text-[rgb(var(--brand-2))]">Secure cookie session</span>
             </div>
 
             {serverError && (
@@ -178,21 +156,6 @@ function Login() {
             <Button type="submit" className="w-full" disabled={!isValid || isSubmitting}>
               {isSubmitting ? "Signing in..." : "Sign in"}
             </Button>
-
-            <div className="flex items-center gap-3 text-xs text-[rgb(var(--text-2))]">
-              <div className="h-px flex-1 bg-white/70" />
-              Or continue with
-              <div className="h-px flex-1 bg-white/70" />
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Button type="button" variant="outline">
-                Google
-              </Button>
-              <Button type="button" variant="outline">
-                GitHub
-              </Button>
-            </div>
           </form>
 
           <p className="mt-6 text-center text-sm text-[rgb(var(--text-2))]">

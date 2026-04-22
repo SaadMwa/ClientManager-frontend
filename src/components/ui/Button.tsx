@@ -8,11 +8,11 @@ const variantStyles: Record<ButtonVariant, string> = {
   primary:
     "bg-[rgb(var(--brand-2))] text-white hover:bg-[rgb(var(--brand-1))] shadow-sm",
   secondary:
-    "bg-[rgb(var(--surface-2))] text-[rgb(var(--text-1))] hover:bg-white border border-[rgb(var(--stroke-1))]",
+    "border border-[rgb(var(--stroke-1))] bg-[rgb(var(--surface-2))] text-[rgb(var(--text-1))] hover:bg-[rgb(var(--surface-1))]",
   outline:
-    "border border-[rgb(var(--stroke-1))] text-[rgb(var(--text-1))] hover:border-[rgb(var(--brand-2))] hover:text-[rgb(var(--brand-2))]",
+    "border border-[rgb(var(--stroke-1))] bg-transparent text-[rgb(var(--text-1))] hover:border-[rgb(var(--brand-2))] hover:text-[rgb(var(--brand-2))] dark:hover:bg-[rgb(var(--surface-2))]",
   ghost:
-    "text-[rgb(var(--text-2))] hover:text-[rgb(var(--text-1))] hover:bg-[rgb(var(--surface-2))]",
+    "text-[rgb(var(--text-2))] hover:bg-[rgb(var(--surface-2))] hover:text-[rgb(var(--text-1))]",
   danger:
     "bg-[rgb(var(--danger))] text-white hover:bg-red-700 shadow-sm",
 };

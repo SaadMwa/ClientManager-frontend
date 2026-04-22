@@ -1,24 +1,37 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate, Link } from "react-router-dom";
-import Login from "./components/Login";
-import Dashboard from "./pages/Dashboard";
-import Register from "./components/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ClientDetails from "./pages/Dashboard";
-import AddClients from "./pages/AnalyticPage";
-import Projects from "./pages/ProjectPage";
+import GuestRoute from "./components/GuestRoute";
+import Skeleton from "./components/ui/Skeleton";
+
+const Login = lazy(() => import("./components/Login"));
+const Register = lazy(() => import("./components/Register"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Clients = lazy(() => import("./pages/AnalyticPage"));
+const Projects = lazy(() => import("./pages/ProjectPage"));
+
+const RouteFallback = () => (
+  <div className="mx-auto max-w-6xl p-6">
+    <div className="grid gap-4 md:grid-cols-2">
+      <Skeleton className="h-36 w-full" />
+      <Skeleton className="h-36 w-full" />
+      <Skeleton className="h-64 w-full md:col-span-2" />
+    </div>
+  </div>
+);
 
 function App() {
   return (
-    
+    <Suspense fallback={<RouteFallback />}>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+        <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
         <Route
           path="/clients/:id"
           element={
             <ProtectedRoute>
-              <ClientDetails />
+              <Clients />
             </ProtectedRoute>
           }
         />
@@ -39,14 +52,14 @@ function App() {
           }
         />
         <Route
-          path="/analytics"
+          path="/clients"
           element={
             <ProtectedRoute>
-              <AddClients />
+              <Clients />
             </ProtectedRoute>
           }
         />
-
+        <Route path="/analytics" element={<Navigate to="/clients" replace />} />
         <Route
           path="*"
           element={
@@ -62,7 +75,7 @@ function App() {
           }
         />
       </Routes>
-  
+    </Suspense>
   );
 }
 

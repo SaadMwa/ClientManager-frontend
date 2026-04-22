@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import "./index.css";
 import App from "./App.tsx";
+import ErrorBoundary from "./components/ErrorBoundary.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,22 +20,24 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <App />
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: "white",
-              color: "rgb(14, 18, 32)",
-              border: "1px solid rgb(222, 229, 240)",
-              boxShadow: "0 12px 30px -20px rgba(17, 24, 39, 0.4)",
-            },
-          }}
-        />
-      </QueryClientProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <App />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: "white",
+                color: "rgb(14, 18, 32)",
+                border: "1px solid rgb(222, 229, 240)",
+                boxShadow: "0 12px 30px -20px rgba(17, 24, 39, 0.4)",
+              },
+            }}
+          />
+        </QueryClientProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   </BrowserRouter>
 );
